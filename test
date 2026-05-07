@@ -1,0 +1,4 @@
+#!/bin/sh
+exec morloc-nexus "$0" "$@"
+### MANIFEST ###
+{"name":"test-vector-cpp","build":{"path":"/home/z/projects/morloc-core/morloc-workspace/lib/stdlib/vector-cpp","time":1778120571,"morloc_version":"0.82.0"},"pools":[{"lang":"cpp","exec":["/home/z/projects/morloc-core/morloc-workspace/lib/stdlib/vector-cpp/pools/test-vector-cpp/pool-cpp.out"],"socket":"pipe-cpp","metadata":{}},{"lang":"py","exec":["python3","/home/z/projects/morloc-core/morloc-workspace/lib/stdlib/vector-cpp/pools/test-vector-cpp/pool.py"],"socket":"pipe-py","metadata":{}}],"commands":[{"name":"test","type":"remote","mid":1,"pool":0,"needed_pools":[0,1],"desc":[],"args":[],"return":{"schema":"<bool>b","type":"Bool","desc":[],"constraints":[],"metadata":{}},"constraints":[],"metadata":{},"group":null}],"groups":[],"desc":[],"epilogues":[],"metadata":{}}

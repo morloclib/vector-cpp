@@ -1,0 +1,15 @@
+module vector-cpp (*)
+
+import vector
+import root-cpp
+
+-- Vector is a typed std::vector with a phantom type-level length.
+-- Same runtime form as List, no separate concrete type needed.
+type Cpp => (Vector (n :: Nat) a) = "std::vector<$2>" n a
+
+%inline
+source Cpp from "vector.hpp"
+    ( "morloc_zeros1" as zeros1
+    , "morloc_ones1"  as ones1
+    , "morloc_fill1"  as fill1
+    )

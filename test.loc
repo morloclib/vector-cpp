@@ -1,0 +1,4 @@
+module test-vector-cpp (test)
+
+import vector.test (test)
+import vector-cpp
