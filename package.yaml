@@ -1,5 +1,5 @@
 name: vector-cpp
-version: 0.1.0
+version: 0.2.0
 homepage: https://github.com/morloclib/vector-cpp
 synopsis: C++ implementations for the vector module
 description: C++ (std::vector) implementations of the Nat-parameterised dense 1D vector primitives.
