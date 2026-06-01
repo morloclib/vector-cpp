@@ -3,13 +3,37 @@ module vector-cpp (*)
 import vector
 import root-cpp
 
--- Vector is a typed std::vector with a phantom type-level length.
--- Same runtime form as List, no separate concrete type needed.
-type Cpp => (Vector (n :: Nat) a) = "std::vector<$2>" n a
-
 %inline
 source Cpp from "vector.hpp"
     ( "morloc_zeros1" as zeros1
     , "morloc_ones1"  as ones1
     , "morloc_fill1"  as fill1
     )
+
+-- Vector shares its C++ runtime form (@std::vector@) with List, so
+-- the same operations apply. vector.hpp provides @morloc_vec_*@
+-- thin wrappers (duplicate templates would collide with root-cpp's
+-- definitions in the same translation unit) that delegate to
+-- std::vector operations directly.
+
+instance Semigroup (Vector n a) where
+  %inline source Cpp from "vector.hpp" ("morloc_vec_concat" as (<>))
+
+instance Monoid (Vector n a) where
+  mempty = []
+
+instance Functor (Vector n) where
+  %inline source Cpp from "vector.hpp" ("morloc_vec_map" as map)
+
+instance Foldable (Vector n) where
+  %inline source Cpp from "vector.hpp"
+    ( "morloc_vec_fold" as fold
+    , "morloc_vec_fold1" as fold1
+    , "morloc_vec_safeFold1" as safeFold1
+    )
+
+instance Eq (Vector n a) where
+  %inline source Cpp from "vector.hpp" ("morloc_vec_eq" as (==))
+
+instance Ord (Vector n a) where
+  %inline source Cpp from "vector.hpp" ("morloc_vec_le" as (<=))
