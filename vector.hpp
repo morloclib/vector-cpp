@@ -7,6 +7,7 @@
 #include <cstdint>
 #include <stdexcept>
 #include <type_traits>
+#include <optional>
 #include <vector>
 
 // ---------------------------------------------------------------------------
@@ -119,6 +120,55 @@ inline bool morloc_vec_eq(const std::vector<T>& xs, const std::vector<T>& ys) {
 template <class T>
 inline bool morloc_vec_le(const std::vector<T>& xs, const std::vector<T>& ys) {
     return xs <= ys;
+}
+
+// Element access via Indexable. Bounds-checked at() throws std::out_of_range
+// on invalid indices, which the morloc runtime surfaces as a pool error.
+// Index arrives as ?Int64 to match __to_index__'s return shape; a nullopt
+// index has no semantic meaning at runtime. Negative indices wrap from
+// the end (Python semantics), matching root-cpp's morloc_at.
+template <class T>
+inline T morloc_vec_at(std::optional<int64_t> oi, const std::vector<T>& xs) {
+    if (!oi) throw std::runtime_error("morloc_vec_at: index is nullopt");
+    int64_t i = *oi;
+    if (i < 0) i += static_cast<int64_t>(xs.size());
+    return xs.at(static_cast<size_t>(i));
+}
+
+// Python-style slice with optional bounds. Each of start/stop/step is a
+// std::optional<int64_t>; nullopt signals "use the default for the step
+// sign". Result is a fresh std::vector<T>; the input's length info is
+// discarded (the morloc type becomes Vector NatUnknown T at the boundary).
+#include <optional>
+template <class T>
+inline std::vector<T> morloc_vec_slice(std::optional<int64_t> start,
+                                        std::optional<int64_t> stop,
+                                        std::optional<int64_t> step,
+                                        const std::vector<T>& xs) {
+    int64_t s = step.value_or(1);
+    if (s == 0) throw std::runtime_error("slice step cannot be zero");
+    int64_t n = static_cast<int64_t>(xs.size());
+    auto norm = [n](int64_t i) -> int64_t {
+        if (i < 0) i += n;
+        if (i < 0) return 0;
+        if (i > n) return n;
+        return i;
+    };
+    int64_t a, b;
+    if (s > 0) {
+        a = start.has_value() ? norm(*start) : 0;
+        b = stop.has_value()  ? norm(*stop)  : n;
+    } else {
+        a = start.has_value() ? norm(*start) : (n - 1);
+        b = stop.has_value()  ? norm(*stop)  : -1;
+    }
+    std::vector<T> out;
+    if (s > 0) {
+        for (int64_t i = a; i < b; i += s) out.push_back(xs[i]);
+    } else {
+        for (int64_t i = a; i > b; i += s) out.push_back(xs[i]);
+    }
+    return out;
 }
 
 #endif

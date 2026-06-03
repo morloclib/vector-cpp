@@ -16,11 +16,17 @@ source Cpp from "vector.hpp"
 -- definitions in the same translation unit) that delegate to
 -- std::vector operations directly.
 
-instance Semigroup (Vector n a) where
-  %inline source Cpp from "vector.hpp" ("morloc_vec_concat" as (<>))
+instance SemigroupDim Vector where
+  %inline source Cpp from "vector.hpp" ("morloc_vec_concat" as (++))
 
-instance Monoid (Vector n a) where
-  mempty = []
+instance MonoidDim Vector where
+  empty0 = []
+
+instance Indexable (Vector n) where
+  %inline source Cpp from "vector.hpp" ("morloc_vec_at" as __access_index__)
+
+instance SliceableDim Vector where
+  %inline source Cpp from "vector.hpp" ("morloc_vec_slice" as __get_slice_dim__)
 
 instance Functor (Vector n) where
   %inline source Cpp from "vector.hpp" ("morloc_vec_map" as map)
