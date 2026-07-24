@@ -74,6 +74,11 @@ inline std::vector<T> morloc_vec_concat(const std::vector<T>& xs,
     return zs;
 }
 
+template <class A>
+inline uint64_t morloc_vec_size(const std::vector<A>& xs) {
+    return static_cast<uint64_t>(xs.size());
+}
+
 template <class A, class F>
 inline auto morloc_vec_map(F f, const std::vector<A>& xs)
     -> std::vector<std::invoke_result_t<F, A>> {

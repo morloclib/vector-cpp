@@ -38,6 +38,9 @@ instance Foldable (Vector n) where
     , "morloc_vec_safeFold1" as safeFold1
     )
 
+instance Sizeable (Vector n a) where
+  %inline source Cpp from "vector.hpp" ("morloc_vec_size" as size)
+
 instance Eq (Vector n a) where
   %inline source Cpp from "vector.hpp" ("morloc_vec_eq" as (==))
 
