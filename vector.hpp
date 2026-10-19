@@ -7,6 +7,7 @@
 #include <cstdint>
 #include <stdexcept>
 #include <type_traits>
+#include <utility>
 #include <optional>
 #include <vector>
 
@@ -91,7 +92,7 @@ inline auto morloc_vec_map(F f, const std::vector<A>& xs)
 
 template <class B, class A, class F>
 inline B morloc_vec_fold(F&& f, B y, const std::vector<A>& xs) {
-    for (const auto& x : xs) y = f(y, x);
+    for (const auto& x : xs) y = f(std::move(y), x);
     return y;
 }
 
@@ -99,7 +100,7 @@ template <class A, class F>
 inline A morloc_vec_fold1(F&& f, const std::vector<A>& xs) {
     if (xs.empty()) throw std::runtime_error("fold1: empty vector");
     A acc = xs.front();
-    for (size_t i = 1; i < xs.size(); ++i) acc = f(acc, xs[i]);
+    for (size_t i = 1; i < xs.size(); ++i) acc = f(std::move(acc), xs[i]);
     return acc;
 }
 
@@ -107,7 +108,7 @@ template <class A, class F>
 inline std::vector<A> morloc_vec_safeFold1(F&& f, const std::vector<A>& xs) {
     if (xs.empty()) return std::vector<A>();
     A acc = xs.front();
-    for (size_t i = 1; i < xs.size(); ++i) acc = f(acc, xs[i]);
+    for (size_t i = 1; i < xs.size(); ++i) acc = f(std::move(acc), xs[i]);
     return std::vector<A>{acc};
 }
 
