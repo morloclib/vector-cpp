@@ -128,6 +128,26 @@ inline bool morloc_vec_le(const std::vector<T>& xs, const std::vector<T>& ys) {
     return xs <= ys;
 }
 
+template <class T>
+inline bool morloc_vec_ne(const std::vector<T>& xs, const std::vector<T>& ys) {
+    return xs != ys;
+}
+
+template <class T>
+inline bool morloc_vec_lt(const std::vector<T>& xs, const std::vector<T>& ys) {
+    return xs < ys;
+}
+
+template <class T>
+inline bool morloc_vec_gt(const std::vector<T>& xs, const std::vector<T>& ys) {
+    return xs > ys;
+}
+
+template <class T>
+inline bool morloc_vec_ge(const std::vector<T>& xs, const std::vector<T>& ys) {
+    return xs >= ys;
+}
+
 // Element access via Indexable. Bounds-checked at() throws std::out_of_range
 // on invalid indices, which the morloc runtime surfaces as a pool error.
 // Index arrives as ?Int64 to match __to_index__'s return shape; a nullopt
