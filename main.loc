@@ -36,6 +36,7 @@ instance Foldable (Vector n) where
     ( "morloc_vec_fold" as fold
     , "morloc_vec_fold1" as fold1
     , "morloc_vec_safeFold1" as safeFold1
+    , "morloc_vec_length" as length
     )
 
 instance Sizeable (Vector n a) where

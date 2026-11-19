@@ -80,6 +80,11 @@ inline uint64_t morloc_vec_size(const std::vector<A>& xs) {
     return static_cast<uint64_t>(xs.size());
 }
 
+template <class A>
+inline int morloc_vec_length(const std::vector<A>& xs) {
+    return static_cast<int>(xs.size());
+}
+
 template <class A, class F>
 inline auto morloc_vec_map(F f, const std::vector<A>& xs)
     -> std::vector<std::invoke_result_t<F, A>> {
